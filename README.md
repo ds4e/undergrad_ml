@@ -7,3 +7,4 @@ Day-to-day content for Foundations of Machine Learning (DS3001)/Analytics 1 (DS3
 - 2026/01/22: EDA
 - 2026/01/27: ECDFs and Outliers
 - 2026/01/29: k-NN classification
+- 2026/02/03: k-NN regression
