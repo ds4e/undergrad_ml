@@ -5,7 +5,7 @@
 <meta content="chrome=1" http-equiv="X-UA-Compatible"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
-<title>scaffold slides</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script type="module">
+<title>05_linear_models slides</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script type="module">
   import mermaid from 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs';
   mermaid.initialize({ startOnLoad: true });
 </script>
@@ -7454,7 +7454,7 @@ main {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">¶</a></h2><ul>
 <li>Neighborhood-based models break down quickly as the number of dimensions increase: In high-dimensional spaces, everything is equally far apart and neighborhoods become meaningless</li>
-<li>Because of this, we typically pivot to <strong>global smoothing</strong> methods: We apply weights to the variables, and aggregate them into predictions</li>
+<li>To exploit datasets with many columns/variables, we apply weights to the variables, and aggregate <strong>variables into predictions</strong> (global smoothing), rathen than focusing on aggregating <strong>observations into predictions</strong> (local smoothing)</li>
 <li>This is the beginning of some of our most powerful, flexible models, eventually leading to neural networks and deep learning (as opposed to trees, random forests, and boosted trees)</li>
 </ul>
 </div>
@@ -8470,8 +8470,12 @@ $$</li>
 <li>Solve the system of equations for $(\hat{b}_0, \hat{b}_1)$</li>
 </ol>
 </li>
-<li>A standard trick for the purposes of this exercise is to subtract the means from each of the variables first, to simplify calculations -- Let's do it on the board</li>
-<li>What do those values represent?</li>
+<li>A standard trick for the purposes of this exercise is to subtract the means from each of the variables first, to simplify calculations -- Let's do it on the board, setting
+$$
+\tilde{y}_i = y_i - \bar{y}, \quad \tilde{x}_i = x_i - \bar{x}
+$$
+and solving for $(\tilde{b}_0, \tilde{b}_1)$, and then substituting the original values back in. Notice that $\frac{1}{n} \sum_{i=1}^n x_i - \bar{x} = 0$, so that $\frac{1}{n} \sum_{i=1}^n \tilde{x}_i = 0$.</li>
+<li>What do the final regression coefficients represent values represent, statistically?</li>
 </ul>
 </div>
 </div>
@@ -8611,6 +8615,150 @@ y_i &amp;=&amp; (y_i - \hat{y}_i) + \hat{y}_i\\
 <li>We are finding the explanation in our model space as close as possible to the observed patterns</li>
 <li>What that means is that the covariance between our errors and our explanatory variables should be zero: There's no signal left to extract from the data, and only noise</li>
 <li>In linear algebra terms, the explanatory variable and the error term are <strong>orthogonal</strong>, and in statistical terms, the covariance is zero: $x \cdot e = 0$.</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=14667487">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="3.-Multiple-Linear-Regression">3. Multiple Linear Regression<a class="anchor-link" href="#3.-Multiple-Linear-Regression">¶</a></h1>
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e54654ab">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Add-More-Covariates">Add More Covariates<a class="anchor-link" href="#Add-More-Covariates">¶</a></h2><ul>
+<li>It is important and helpful to learn about SLR! The intuition carries over to scenarios with more variables in deep ways</li>
+<li>But... we want a lot of variables in our regressions</li>
+<li>In principle, this is easy to do: Just go back to the original concept:
+$$
+\hat{y}_i = b_0 + b_1 x_{i1} + b_2 x_{i2} + ... + b_L v_{iL}
+$$</li>
+<li>But we also want to understand how this method "works"</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b84415d5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="SciKit">SciKit<a class="anchor-link" href="#SciKit">¶</a></h2><ul>
+<li>Of course, we can run MLR simply by passing a larger feature matrix into the API:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'target_variable'</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s1">'feature_1`, `feature_2`, ..., '</span><span class="n">feature_L</span><span class="err">`</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=020eea44">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Partial-Regression">Partial Regression<a class="anchor-link" href="#Partial-Regression">¶</a></h2><ul>
+<li>With linear algebra, we can "solve" MLR the same way we solved SLR: The solution is $\hat{b} = (X^{\top}X)^{-1}(X^{\top}y) \approx \text{cov}(X,y)/\text{cov(X,X)}$</li>
+<li>There is a much more intuition way to understand what the slope coefficients are, using this algorithm to generate them:<ol>
+<li>First Stage: Pick a variable $x_k$. Regress $y$ and $x_k$ on all of the other variables in the regression, and save the residuals, $r_y$ and $r_{x_k}$.</li>
+<li>Second Stage: Run single linear regression of $r_y$ on $r_{x_k}$. The slope coefficent has the same value as $\hat{b}_k$</li>
+</ol>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=91f78f8b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">## EXAMPLE</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fe4d4f9d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Multicolinearity">Multicolinearity<a class="anchor-link" href="#Multicolinearity">¶</a></h2><ul>
+<li>This is extremely important!</li>
+<li>Imagine we regress $y$ on two variables $x_1$ and $x_2$ that are very highly correlated with each other and $y$...</li>
+<li>The two variables explain the same variation in the target/response/outcome variable...</li>
+<li>So in MLR, they cancel each other out, explaining the same variation in $y$ in the first stage</li>
+<li>This is called <strong>multicolinearity</strong>: The tendency of highly correlated variables to cancel one another out, and give the model an unexpected "mushy" and "high variance" quality</li>
+<li>The lesson is that by dropping variables, your model can become a better predictor</li>
+<li>Many of our tools (Principal Components Analysis, Regularization) are designed to reduce the correlation between explanatory variables or pick the best set of explanatory variables</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=155016cb">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Interpreting-Coefficients">Interpreting Coefficients<a class="anchor-link" href="#Interpreting-Coefficients">¶</a></h2><ul>
+<li>If $x_k$ goes up by $1\%$, then $\hat{y}$ goes up by $b_k \%$</li>
+<li>If you understand partial regression, you understand that, for the most part, we cannot really interpret these coefficients as <strong>causal estimates</strong>: If we intervene and adjust $x_{ik}$, $\hat{y}_i$ is not necessarily going to move by $b_k$ in expectation</li>
+<li>If, however, we have two cases, $\hat{x}_1$ and $\hat{x}_2$, and the only difference in their values is a 1 unit change in the $k$-th variable, then we would expect the change in their expected outcomes to be $b_k$</li>
+<li>The difference is subtle, but very important: The world generates the data according to complex processes, and we can guess what's going to happen based on the data we have, but intervening in the system</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d8e1c511">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Model-Selection">Model Selection<a class="anchor-link" href="#Model-Selection">¶</a></h2><ul>
+<li>In $k$-NN, our hyperparameter was $k$, the number of neighbors: The model is always tempted to pick a smaller $k$ and use a more highly variable and overconfident model to make predictions -- in local smoothing, the model wants to increase variability and reduce reliability by taking a very small set of neighbors from which to make predictions. This needs to be disciplined.</li>
+<li>With linear regression, the problem is that using more variables always improves fit on the training data, but can simultaneously reduce performance on the test/validation data. This is typically because multicolinearity results in overfitting.</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c8bf651a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a></h2><ul>
+<li>Linear regression, despite its simplicity, is one of our most powerful tools for analyzing data</li>
+<li>This general pattern of thinking -- describe error, pick a loss function, use calculus/gradient descent to minimize the loss -- is the backbone of machine learning (this is the simplest form of neural network with one output node and no hidden layers)</li>
+<li>One of linear regression's greatest advantages is that it is explainable and interpretable: The choice of coefficients ultimately makes a lot of sense (scaled covariances between the response and the feature), and changes in $x$ lead to easily understood changes in $\hat{y}$</li>
+<li>For many fields of scientific inquiry, linear regression is the workhorse quantitative tool</li>
 </ul>
 </div>
 </div>
