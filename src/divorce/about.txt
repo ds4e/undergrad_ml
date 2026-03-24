@@ -1,0 +1,11 @@
+
+
+About this dataset
+This dataset contains data about 150 couples with their corresponding Divorce Predictors Scale variables (DPS) on the basis of Gottman couples therapy.
+The couples are from various regions of Turkey wherein the records were acquired from face-to-face interviews from couples who were already divorced or happily married.
+All responses were collected on a 5 point scale (0=Never, 1=Seldom, 2=Averagely, 3=Frequently, 4=Always).
+
+How to use
+Predict divorce events
+Explore predictive factors that lead to divorce
+More datasets
