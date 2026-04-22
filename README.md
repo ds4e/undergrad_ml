@@ -31,5 +31,5 @@ Day-to-day content for Foundations of Machine Learning (DS3001)/Analytics 1 (DS3
 - 2026/04/09: Principal Components Analysis
 - 2026/04/14: Principal Components Regression
 - 2026/04/21: SciKit Pipelines
-- 2026/04/23: Bias and Fairness
+- 2026/04/23: Multilayer Perceptron
 - 2026/04/28: Final Lab
