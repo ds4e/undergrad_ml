@@ -18,7 +18,7 @@ Day-to-day content for Foundations of Machine Learning (DS3001)/Analytics 1 (DS3
 - 2026/02/26: Regularization
 - 2026/03/05: Spring Break
 - 2026/03/07: Spring Break
-- 2026/03/10: Genes and Regularization
+- 2026/03/10: Genomics Project
 - 2026/03/12: General Linear Models
 - 2026/03/17: General Linear Models
 - 
@@ -32,4 +32,4 @@ Day-to-day content for Foundations of Machine Learning (DS3001)/Analytics 1 (DS3
 - 2026/04/14: Principal Components Regression
 - 2026/04/21: SciKit Pipelines
 - 2026/04/23: Multilayer Perceptron
-- 2026/04/28: Final Lab
+- 2026/04/28: Demand Estimation Project
